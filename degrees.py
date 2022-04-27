@@ -71,6 +71,7 @@ def main():
     if target is None:
         sys.exit("Person not found.")
 
+    # shortest_path() is called; [source]=person_id
     path = shortest_path(source, target)
 
     if path is None:
@@ -94,8 +95,30 @@ def shortest_path(source, target):
     If no possible path, returns None.
     """
 
-    # TODO
-    raise NotImplementedError
+    # Keep track of number states explored; degree of shortes path
+    # num_explored = 0
+
+    # Initialize frontier to source person
+    start = Node(person_id=source, paring=None)
+    frontier = QueueFrontier()
+    frontier.add(start)
+
+    # Initialize empty explored set
+    explored = set()
+
+    # Keep looping until solution is found
+    while True:
+        # if nothing left in frontier then no path
+        if frontier.empty():
+            return None
+
+    # Chose Node from frontier
+    node = frontier.remove()
+    # num_explored += 1
+
+    # If Node is goal then we have a solution
+    if node.person_id == target:
+        raise Exception("nope")
 
 
 def person_id_for_name(name):
@@ -135,6 +158,13 @@ def neighbors_for_person(person_id):
         for person_id in movies[movie_id]["stars"]:
             neighbors.add((movie_id, person_id))
     return neighbors
+
+
+def test_goalState(neighbors, target):
+    # if target is in neighbors then goal state is reached
+    # neighbors is set() -> for neigbor in neighbors target in neighbor
+    # maybe contains_state() in class StackFrontier() could be used
+    return any(target in neighbor for neighbor in neighbors)
 
 
 if __name__ == "__main__":
