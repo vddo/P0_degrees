@@ -160,11 +160,7 @@ def neighbors_for_person(person_id):
     return neighbors
 
 
-def test_goalState(neighbors, target):
-    # if target is in neighbors then goal state is reached
-    # neighbors is set() -> for neigbor in neighbors target in neighbor
-    # maybe contains_state() in class StackFrontier() could be used
-    return any(target in neighbor for neighbor in neighbors)
+
 
 
 if __name__ == "__main__":
