@@ -115,18 +115,6 @@ def shortest_path(source, target):
 
         # Chose Node from frontier
         node = frontier.remove()
-        # num_explored += 1
-
-        # If Node is goal then we have a solution
-        if node.person_id == target:
-            path = []
-            while node.parent is not None:
-                path.append((node.con_movie_id, node.person_id))
-                node = node.parent
-            path.reverse()
-            return path
-            # raise Exception("nope")  # todo: returning list
-            # with shortest_path
 
         # Mark node as explored
         explored.add(node.person_id)
@@ -137,6 +125,14 @@ def shortest_path(source, target):
                     not in explored:
                 child = Node(person_id=person_id, con_movie_id=movie_id,
                              parent=node)
+                # If Node is goal then we have a solution
+                if child.person_id == target:
+                    path = []
+                    while child.parent is not None:
+                        path.append((child.con_movie_id, child.person_id))
+                        child = child.parent
+                    path.reverse()
+                    return path
                 frontier.add(child)
 
 
