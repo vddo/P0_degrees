@@ -1,6 +1,8 @@
 class Node():
-    def __init__(self, person_id, con_movie_id):
+    def __init__(self, person_id, con_movie_id, parent):
+        self.person_id = person_id
         self.con_movie_id = con_movie_id
+        self.parent = parent
 
 
 class StackFrontier():
@@ -10,11 +12,8 @@ class StackFrontier():
     def add(self, node):
         self.frontier.append(node)
 
-    # Checks if node (= combination fo person_id and movie_id)
-    # already exists
-    def contains_node(self, person_id, movie_id):
+    def contains_person(self, person_id):
         return any(node.person_id == person_id
-                   and node.con_movie_id == movie_id
                    for node in self.frontier
                    )
 
