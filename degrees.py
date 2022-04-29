@@ -1,7 +1,7 @@
 import csv
 import sys
 
-from util import Node, StackFrontier, QueueFrontier
+from util import Node, QueueFrontier
 
 # Maps names to a set of corresponding person_ids
 names = {}
@@ -56,7 +56,8 @@ def main():
     if len(sys.argv) > 2:
         # if the console input is wrong do it right
         sys.exit("Usage: python degrees.py [directory]")
-    # if input is like "python degrees.py small" then ok, else take directory "large"
+    # if input is like "python degrees.py small" then ok, else take
+    # directory "large"
     directory = sys.argv[1] if len(sys.argv) == 2 else "large"
 
     # Load data from files into memory
@@ -99,7 +100,7 @@ def shortest_path(source, target):
     # num_explored = 0
 
     # Initialize frontier to source person
-    start = Node(person_id=source, paring=None)
+    start = Node(person_id=source, con_movie_id=None, parent=None)
     frontier = QueueFrontier()
     frontier.add(start)
 
@@ -112,13 +113,31 @@ def shortest_path(source, target):
         if frontier.empty():
             return None
 
-    # Chose Node from frontier
-    node = frontier.remove()
-    # num_explored += 1
+        # Chose Node from frontier
+        node = frontier.remove()
+        # num_explored += 1
 
-    # If Node is goal then we have a solution
-    if node.person_id == target:
-        raise Exception("nope")
+        # If Node is goal then we have a solution
+        if node.person_id == target:
+            path = []
+            while node.parent is not None:
+                path.append((node.con_movie_id, node.person_id))
+                node = node.parent
+            path.reverse()
+            return path
+            # raise Exception("nope")  # todo: returning list
+            # with shortest_path
+
+        # Mark node as explored
+        explored.add(node.person_id)
+
+        # Add neigbor nodes to frontier
+        for movie_id, person_id in neighbors_for_person(node.person_id):
+            if not frontier.contains_person(person_id) and person_id \
+                    not in explored:
+                child = Node(person_id=person_id, con_movie_id=movie_id,
+                             parent=node)
+                frontier.add(child)
 
 
 def person_id_for_name(name):
@@ -158,9 +177,6 @@ def neighbors_for_person(person_id):
         for person_id in movies[movie_id]["stars"]:
             neighbors.add((movie_id, person_id))
     return neighbors
-
-
-
 
 
 if __name__ == "__main__":
